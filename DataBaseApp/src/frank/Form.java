@@ -4,6 +4,7 @@ validation, prompting and pushing to file
  */
 package frank;
 import java.io.File;
+import java.io.IOException;
 import static javafx.application.Application.STYLESHEET_MODENA;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -32,7 +33,7 @@ import javax.swing.JOptionPane;
 
 
 
-public class Form{
+public class Form {
     
     Image passportImage;
     Image defaultImage;
@@ -333,35 +334,45 @@ public class Form{
         }
         
         if(count!=information.length-1|passportImage==null){
-             JOptionPane.showMessageDialog(null,"Partially Filled Form", "Fill in the required details", JOptionPane.INFORMATION_MESSAGE);
+           // pushToFile();
+            JOptionPane.showMessageDialog(null,"Partially Filled Form", "Fill in the required details", JOptionPane.INFORMATION_MESSAGE);
         }else{
+            try{
              pushToFile();
+            }catch(Exception e){
+            System.out.println("Error Occured");
+            }
         }
         }
         
-        public void pushToFile(){
-        People setValues=new People();
-        setValues.setSurname(information[0]);
-        setValues.setFirstname(information[1]);
-        setValues.setOthername(information[2]);
-        setValues.setAddress(information[3]);
-        setValues.setTown(information[4]);
-        setValues.setLga(information[5]);
-        setValues.setState(information[6]);
-        setValues.setCountry(information[7]);
-        setValues.setBirthdate(information[8]);
-        setValues.setPhonenumber1(information[9]);
-        setValues.setPhonenumber2(information[10]);
-        setValues.setEmail(information[11]);
-        setValues.setImage(passportImage);
-        setValues.setSex(information[12]);
-        FileWrite fw=new FileWrite(setValues);
-        fw.writeToFile(setValues);
-        fw.readFromFile();
-        }
+        public void pushToFile()throws IOException{         
+             People setValues=new People();
+             setValues.setSurname(information[0]);
+             setValues.setFirstname(information[1]);
+             setValues.setOthername(information[2]);
+             setValues.setAddress(information[3]);
+             setValues.setTown(information[4]);
+             setValues.setLga(information[5]);
+             setValues.setState(information[6]);
+             setValues.setCountry(information[7]);
+             setValues.setBirthdate(information[8]);
+             setValues.setPhonenumber1(information[9]);
+             setValues.setPhonenumber2(information[10]);
+             setValues.setEmail(information[11]);
+             setValues.setImage(passportImage);
+             setValues.setSex(information[12]);
+            // System.out.println("Entered push to file");
+             FileOperations fop=new FileOperations(setValues);
+             System.out.println("Entered push to file");
+             fop.fillVectorWithPositionsAndLength();
+             fop.writeToFile();
+             fop.fillVectorWithPositionsAndLength();
+             fop.readFromFile();
+    }
         
         
-        public void setToForm(){
+        
+     public void setToForm(){
         surNameTextField.setText(information[0]);
         firstNameTextField.setText(information[1]);
         otherNamesTextField.setText(information[2]);
